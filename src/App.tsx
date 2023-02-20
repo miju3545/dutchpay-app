@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CreateGroupView, AddMembersView } from './components/group';
+import { LoginView, SignUpView } from './components/auth';
+import ExpenseView from './components/expense/ExpenseView';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<CreateGroupView />} />
+          <Route path="/members" element={<AddMembersView />} />
+          <Route path="/expense" element={<ExpenseView />} />
+          <Route path="/signup" element={<SignUpView />} />
+          <Route path="/login" element={<LoginView />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;
