@@ -30,11 +30,11 @@ const FocusTrap: FC<Props> = ({ children, focusFirst }) => {
     if (els.length) els[0].focus();
   };
 
-  useEffect(() => {
-    trapFocus();
+  // useEffect(() => {
+  //   trapFocus();
 
-    return returnFocus;
-  }, []);
+  //   return returnFocus;
+  // }, []);
 
   return React.createElement(
     'div',

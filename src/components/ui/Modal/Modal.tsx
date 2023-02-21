@@ -7,9 +7,10 @@ type Props = {
   className?: string;
   children?: ReactNode;
   onClose: () => void;
+  isCloseExisting?: boolean;
 };
 
-const Modal: FC<Props> = ({ className, onClose, children }) => {
+const Modal: FC<Props> = ({ className, onClose, children, isCloseExisting = false }) => {
   const ref = useRef() as MutableRefObject<HTMLDivElement>;
 
   const handleKey = useCallback((e: KeyboardEvent) => {
@@ -33,9 +34,9 @@ const Modal: FC<Props> = ({ className, onClose, children }) => {
   }, [handleKey]);
 
   return (
-    <div>
-      <div>
-        {/* <button onClick={() => onClose()}>close button</button> */}
+    <div style={{ position: 'fixed', top: 0, left: 0, bottom: 0, right: 0 }}>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+        {isCloseExisting && <button onClick={() => onClose()}>close button</button>}
         <FocusTrap>{children}</FocusTrap>
       </div>
     </div>

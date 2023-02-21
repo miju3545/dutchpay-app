@@ -1,11 +1,10 @@
-import { FC, useState, useEffect, useCallback, SyntheticEvent, useRef, MutableRefObject } from 'react';
+import { FC, useState, useEffect, useCallback, SyntheticEvent } from 'react';
 import { useUI } from '../ui/context';
 import Input from '../ui/Input/Input';
 import useInput from '../../lib/hooks/useInput';
 import { Button } from '../ui';
 
 const LoginView: FC = () => {
-  const root = useRef() as MutableRefObject<HTMLFormElement>;
   const {
     ref: emailRef,
     value: email,
@@ -17,7 +16,7 @@ const LoginView: FC = () => {
   const [disabled, setDisabled] = useState(true);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const { setModalView, closeModal } = useUI();
+  const { setModalView } = useUI();
 
   const handleLogin = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,7 +59,7 @@ const LoginView: FC = () => {
   return (
     <div>
       <h2>로그인</h2>
-      <form onSubmit={handleLogin} ref={root}>
+      <form onSubmit={handleLogin}>
         <Input ref={emailRef} value={email} onChange={onEmailChange} />
         <Input value={password} onChange={onPasswordChange} />
         <Button type="submit" disabled={disabled} loading={loading}>

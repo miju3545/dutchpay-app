@@ -29,6 +29,13 @@ const useInput = (
   useEffect(() => {
     setDirty(!!value.length);
   }, [value]);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, [ref]);
+
   return { ref, value, isDirty, onChange: handler, onReset, onFocus };
 };
 

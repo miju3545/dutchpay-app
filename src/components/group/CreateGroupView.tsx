@@ -2,29 +2,28 @@ import { FC, useState, SyntheticEvent, useCallback, useEffect } from 'react';
 import { useUI } from '../ui/context';
 import { Button } from '../ui';
 import Input from '../ui/Input/Input';
+import GroupLayout from '../common/GroupLayout';
+import { useGroup } from './context';
+import useInput from '../../lib/hooks/useInput';
 
 const CreateGroupView: FC = () => {
-  // form state
-  const [groupName, setGroupName] = useState('');
+  const { ref, value: groupName, onChange: onChangeGroupName, isDirty: isGroupNameDirty } = useInput('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [dirty, setDirty] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const { setModalView } = useUI();
+  const { saveGroupName } = useGroup();
 
   const handleCreate = async (e: SyntheticEvent<EventTarget>) => {
     e.preventDefault();
 
-    // if (!dirty && disabled) {
-    //   handleValidation();
-    // }
-
     try {
       setLoading(true);
       setMessage('');
-      // await createGroup({ name });
+
+      saveGroupName(groupName);
       setModalView('ADDMEMBERS_VIEW');
-    } catch ({ errors }) {
+    } catch ({ errors }: any) {
       if (errors instanceof Array) {
         setMessage(errors.map((e: any) => e.message).join('<br />'));
       } else {
@@ -37,32 +36,28 @@ const CreateGroupView: FC = () => {
   };
 
   const handleValidation = useCallback(() => {
-    const validName = /\w{3,}/.test(groupName);
+    const validName = !!groupName.length;
 
-    if (dirty) {
+    if (isGroupNameDirty) {
       setDisabled(!validName);
     }
-  }, [groupName, dirty]);
+  }, [groupName, isGroupNameDirty]);
 
   useEffect(() => {
     handleValidation();
-  }, [handleValidation, groupName, dirty]);
-
-  useEffect(() => {
-    if (groupName.length) setDirty(true);
-  }, [groupName]);
+  }, [handleValidation]);
 
   return (
     <div>
-      CreateGroupView
+      <h1>먼저, 더치 페이 할 그룹을 만들어 주세요.</h1>
       <form onSubmit={handleCreate}>
-        <Input value={groupName} onChange={(e) => setGroupName(e.target.value)} />
+        <Input ref={ref} value={groupName} onChange={onChangeGroupName} placeholder="2023 부산 여행" />
         <Button type="submit" loading={loading} disabled={disabled}>
-          Save Group Name.
+          저장
         </Button>
       </form>
     </div>
   );
 };
 
-export default CreateGroupView;
+export default GroupLayout(CreateGroupView);
