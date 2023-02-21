@@ -14,6 +14,7 @@ const FocusTrap: FC<Props> = ({ children, focusFirst }) => {
       anchor.current.focus();
     }
   };
+
   const trapFocus = () => {
     if (root.current) {
       root.current.focus();

@@ -1,6 +1,6 @@
 import { FC, MutableRefObject, ReactNode, useCallback, useEffect, useRef } from 'react';
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
-import s from './Modal.module.css';
+
 import FocusTrap from './FocusTrap';
 
 type Props = {
@@ -21,19 +21,21 @@ const Modal: FC<Props> = ({ className, onClose, children }) => {
   useEffect(() => {
     const modal = ref.current;
 
-    window.addEventListener('keydown', handleKey);
-    disableBodyScroll(modal, { reserveScrollBarGap: true });
-
-    return () => {
-      clearAllBodyScrollLocks();
+    if (modal) {
       window.addEventListener('keydown', handleKey);
-    };
+      disableBodyScroll(modal, { reserveScrollBarGap: true });
+
+      return () => {
+        clearAllBodyScrollLocks();
+        window.addEventListener('keydown', handleKey);
+      };
+    }
   }, [handleKey]);
 
   return (
-    <div className={s.root}>
-      <div className={s.modal}>
-        <button onClick={() => onClose()}>close button</button>
+    <div>
+      <div>
+        {/* <button onClick={() => onClose()}>close button</button> */}
         <FocusTrap>{children}</FocusTrap>
       </div>
     </div>
