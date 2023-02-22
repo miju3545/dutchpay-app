@@ -2,26 +2,22 @@ import { FC, ReactNode, createContext, useReducer, useCallback, useMemo, useCont
 
 export interface State {
   groupName: string;
-  // members?: string[];
-}
-
-export interface User {
-  id: number;
-  nickname: string;
+  members: string[];
 }
 
 type ReturnState = State & {
   saveGroupName: (name: string) => void;
+  addMembers: (names: string[]) => void;
   // addMember: (name: string) => void;
   // removeMember: (name: string) => void;
 };
 
 const initialState: State = {
   groupName: '',
+  members: [],
 };
 
-type Action = { type: 'SAVE_GROUP_NAME'; name: string };
-// | { type: 'ADD_MEMBER'; name: string }
+type Action = { type: 'SAVE_GROUP_NAME'; name: string } | { type: 'ADD_MEMBERS'; names: string[] };
 // | { type: 'REMOVE_MEMBER'; name: string };
 
 export const GroupContext = createContext<ReturnState | null>(null);
@@ -34,9 +30,9 @@ const groupReducer = (state: State, action: Action): State => {
       return { ...state, groupName: action.name };
     }
 
-    // case 'ADD_MEMBER': {
-    //   return { ...state, members: [...state.members, action.name] };
-    // }
+    case 'ADD_MEMBERS': {
+      return { ...state, members: [...state.members, ...action.names] };
+    }
 
     default:
       return state;
@@ -47,11 +43,13 @@ export const GroupProvider: FC<{ children?: ReactNode }> = (props) => {
   const [state, dispatch] = useReducer(groupReducer, initialState);
 
   const saveGroupName = useCallback((name: string) => dispatch({ type: 'SAVE_GROUP_NAME', name }), [dispatch]);
+  const addMembers = useCallback((names: string[]) => dispatch({ type: 'ADD_MEMBERS', names }), [dispatch]);
 
   const value: ReturnState = useMemo(
     () => ({
       ...state,
       saveGroupName,
+      addMembers,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [state]

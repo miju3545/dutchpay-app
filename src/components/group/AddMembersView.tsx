@@ -1,19 +1,19 @@
-import { FC, useState, SyntheticEvent, useEffect, useCallback, KeyboardEvent } from 'react';
-import { useUI } from '../ui/context';
-import { Button } from '../ui';
-import Input from '../ui/Input/Input';
+import { FC, useState, useEffect, useCallback, KeyboardEvent, memo } from 'react';
+import { useUI } from '@components/ui/context';
+import { Button } from '@components/ui';
+import Input from '@components/ui/Input/Input';
 import { useGroup } from './context';
-import GroupLayout from '../common/GroupLayout';
-import useUniqueMembers from '../../lib/hooks/useUniqueMembers';
+import GroupLayout from '@components/common/GroupLayout';
+import useUniqueMembers from '@lib/hooks/useUniqueMembers';
 
-const Tag: FC<{ value: string; onRemove: () => void }> = ({ value, onRemove }) => {
+const Tag: FC<{ value: string; onRemove: () => void }> = memo(({ value, onRemove }) => {
   return (
     <li>
       {value}
       <button onClick={onRemove}>x</button>
     </li>
   );
-};
+});
 
 const AddMembersView: FC = () => {
   const {
@@ -31,7 +31,7 @@ const AddMembersView: FC = () => {
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
   const { setModalView } = useUI();
-  const { groupName } = useGroup();
+  const { groupName, addMembers } = useGroup();
 
   const handleAdd = () => {
     onAppend(current);
@@ -40,6 +40,15 @@ const AddMembersView: FC = () => {
 
   const handleValidation = useCallback(() => {
     setDisabled(duplicateError);
+
+    try {
+      setLoading(true);
+
+      addMembers(total);
+    } catch ({ error }: any) {
+    } finally {
+      setLoading(false);
+    }
   }, [current]);
 
   useEffect(() => {

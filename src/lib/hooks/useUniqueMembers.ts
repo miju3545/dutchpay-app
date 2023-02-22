@@ -15,9 +15,9 @@ const useUniqueMembers = (): {
   const ref = useRef() as MutableRefObject<HTMLInputElement>;
   const [current, setCurrent] = useState('');
   const [isDirty, setDirty] = useState(false);
-  const [_total, setTotal] = useState<string[]>([]);
   const [duplicateError, setDuplicateError] = useState(false);
 
+  const [_total, setTotal] = useState<string[]>([]);
   const total = useMemo(() => _total, [_total]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +62,7 @@ const useUniqueMembers = (): {
   }, [current]);
 
   useEffect(() => {
-    if (isDirty) setDuplicateError(false);
+    setDuplicateError(isDirty);
   }, [isDirty]);
 
   return { ref, current, isDirty, total, onChange, onAppend, onRemove, onResetCurrent, onResetTotal, duplicateError };
