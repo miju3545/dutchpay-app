@@ -22,6 +22,7 @@ const useUniqueMembers = (): {
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrent(e.target.value);
+    setDuplicateError(false);
   };
 
   const onAppend = useCallback(
@@ -60,10 +61,6 @@ const useUniqueMembers = (): {
   useEffect(() => {
     setDirty(current.length > 0);
   }, [current]);
-
-  useEffect(() => {
-    setDuplicateError(isDirty);
-  }, [isDirty]);
 
   return { ref, current, isDirty, total, onChange, onAppend, onRemove, onResetCurrent, onResetTotal, duplicateError };
 };

@@ -1,5 +1,5 @@
 import { ComponentType, useEffect } from 'react';
-import useToken from './useToken';
+import useToken from './hooks/useToken';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {};

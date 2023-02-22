@@ -1,12 +1,12 @@
 import { FC, useState, useEffect, useCallback, KeyboardEvent, memo } from 'react';
-import { useUI } from 'components/ui/context';
 import { Button } from 'components/ui';
 import Input from 'components/ui/Input/Input';
 import { useGroup } from './context';
-import GroupLayout from 'components/common/GroupLayout';
 import useUniqueMembers from 'lib/hooks/useUniqueMembers';
 import { useNavigate } from 'react-router-dom';
-import withLoggedIn from 'lib/hooks/withLoggedIn';
+import withLoggedIn from 'lib/withLoggedIn';
+import compose from 'lib/compose';
+import withHistory from '../../lib/withHistory';
 
 const Tag: FC<{ value: string; onRemove: () => void }> = memo(({ value, onRemove }) => {
   return (
@@ -32,8 +32,7 @@ const AddMembersView: FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const { setModalView, closeModal } = useUI();
-  const { groupName, addMembers, members } = useGroup();
+  const { groupName, addMembers } = useGroup();
 
   const navigate = useNavigate();
 
@@ -51,7 +50,7 @@ const AddMembersView: FC = () => {
   }, [handleValidation]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !disabled) {
       handleAddMember();
     }
   };
@@ -61,7 +60,6 @@ const AddMembersView: FC = () => {
       setLoading(true);
 
       addMembers(total);
-      closeModal();
 
       navigate('/expense');
     } catch ({ error }: any) {
@@ -72,7 +70,9 @@ const AddMembersView: FC = () => {
 
   return (
     <div>
-      <h1>그룹에 속한 맴버들을 모두 초대해주세요.</h1>
+      <h1>
+        <span>{`"${groupName}"` || '그룹'}</span>에 속한 맴버들을 모두 초대해주세요.
+      </h1>
       <div>
         <Input
           ref={ref}
@@ -103,4 +103,4 @@ const AddMembersView: FC = () => {
   );
 };
 
-export default withLoggedIn(AddMembersView);
+export default compose(withLoggedIn, withHistory('/group'))(AddMembersView);

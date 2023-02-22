@@ -1,12 +1,15 @@
 import ExpenseView from 'components/expense/ExpenseView/ExpenseView';
 import { useGroup } from 'components/group/context';
-import { GroupLayout } from 'components/common';
+import compose from 'lib/compose';
+import withLoggedIn from 'lib/withLoggedIn';
+import withHistory from '../lib/withHistory';
 
 const Expense = () => {
-  const { groupName, members } = useGroup();
-
-  console.log('useGroups', groupName, members);
-  return <ExpenseView />;
+  return (
+    <div>
+      <ExpenseView />;
+    </div>
+  );
 };
 
-export default GroupLayout(Expense);
+export default compose(withLoggedIn, withHistory('/members'))(Expense);

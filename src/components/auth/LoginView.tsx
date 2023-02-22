@@ -25,7 +25,6 @@ const LoginView: FC = () => {
       setLoading(true);
       setMessage('');
 
-      console.log({ email, password });
       onEmailReset();
       onPasswordReset();
     } catch ({ errors }: any) {

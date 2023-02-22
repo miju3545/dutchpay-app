@@ -1,8 +1,11 @@
 import { FC, ReactNode, createContext, useReducer, useCallback, useMemo, useContext } from 'react';
 
+export type History = '/' | '/group' | '/members' | '/expense';
+
 export interface State {
   groupName: string;
   members: string[];
+  history: History;
 }
 
 type ReturnState = State & {
@@ -15,6 +18,7 @@ type ReturnState = State & {
 const initialState: State = {
   groupName: '',
   members: [],
+  history: '/',
 };
 
 type Action = { type: 'SAVE_GROUP_NAME'; name: string } | { type: 'ADD_MEMBERS'; names: string[] };
@@ -27,11 +31,11 @@ GroupContext.displayName = 'GroupContext';
 const groupReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'SAVE_GROUP_NAME': {
-      return { ...state, groupName: action.name };
+      return { ...state, groupName: action.name, history: '/group' };
     }
 
     case 'ADD_MEMBERS': {
-      return { ...state, members: [...state.members, ...action.names] };
+      return { ...state, members: [...state.members, ...action.names], history: '/members' };
     }
 
     default:

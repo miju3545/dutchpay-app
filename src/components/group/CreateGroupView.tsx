@@ -5,7 +5,7 @@ import Input from '../ui/Input/Input';
 import { useGroup } from './context';
 import useInput from '../../lib/hooks/useInput';
 import { useNavigate } from 'react-router-dom';
-import withLoggedIn from 'lib/hooks/withLoggedIn';
+import withLoggedIn from 'lib/withLoggedIn';
 
 const CreateGroupView: FC = () => {
   const { ref, value: groupName, onChange: onChangeGroupName, isDirty: isGroupNameDirty } = useInput('');

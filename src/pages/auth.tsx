@@ -1,5 +1,5 @@
 import { LoginView } from 'components/auth';
-import withLoggedIn from 'lib/hooks/withLoggedIn';
+import withLoggedIn from 'lib/withLoggedIn';
 import { FC, useEffect } from 'react';
 
 const Auth: FC = () => {
