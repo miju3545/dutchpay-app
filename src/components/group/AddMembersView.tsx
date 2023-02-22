@@ -1,10 +1,12 @@
 import { FC, useState, useEffect, useCallback, KeyboardEvent, memo } from 'react';
-import { useUI } from '@components/ui/context';
-import { Button } from '@components/ui';
-import Input from '@components/ui/Input/Input';
+import { useUI } from 'components/ui/context';
+import { Button } from 'components/ui';
+import Input from 'components/ui/Input/Input';
 import { useGroup } from './context';
-import GroupLayout from '@components/common/GroupLayout';
-import useUniqueMembers from '@lib/hooks/useUniqueMembers';
+import GroupLayout from 'components/common/GroupLayout';
+import useUniqueMembers from 'lib/hooks/useUniqueMembers';
+import { useNavigate } from 'react-router-dom';
+import withLoggedIn from 'lib/hooks/withLoggedIn';
 
 const Tag: FC<{ value: string; onRemove: () => void }> = memo(({ value, onRemove }) => {
   return (
@@ -30,25 +32,18 @@ const AddMembersView: FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const { setModalView } = useUI();
-  const { groupName, addMembers } = useGroup();
+  const { setModalView, closeModal } = useUI();
+  const { groupName, addMembers, members } = useGroup();
 
-  const handleAdd = () => {
+  const navigate = useNavigate();
+
+  const handleAddMember = () => {
     onAppend(current);
     onResetCurrent();
   };
 
   const handleValidation = useCallback(() => {
     setDisabled(duplicateError);
-
-    try {
-      setLoading(true);
-
-      addMembers(total);
-    } catch ({ error }: any) {
-    } finally {
-      setLoading(false);
-    }
   }, [current]);
 
   useEffect(() => {
@@ -57,7 +52,21 @@ const AddMembersView: FC = () => {
 
   const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleAdd();
+      handleAddMember();
+    }
+  };
+
+  const handleInvite = () => {
+    try {
+      setLoading(true);
+
+      addMembers(total);
+      closeModal();
+
+      navigate('/expense');
+    } catch ({ error }: any) {
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,7 +95,7 @@ const AddMembersView: FC = () => {
           ))}
         </ul>
         <button onClick={onResetTotal}>모두 지우기</button>
-        <Button type="button" loading={loading}>
+        <Button type="button" loading={loading} onClick={handleInvite}>
           {total.length}명 초대하기
         </Button>
       </div>
@@ -94,4 +103,4 @@ const AddMembersView: FC = () => {
   );
 };
 
-export default GroupLayout(AddMembersView);
+export default withLoggedIn(AddMembersView);

@@ -2,9 +2,10 @@ import { FC, useState, SyntheticEvent, useCallback, useEffect } from 'react';
 import { useUI } from '../ui/context';
 import { Button } from '../ui';
 import Input from '../ui/Input/Input';
-import GroupLayout from '../common/GroupLayout';
 import { useGroup } from './context';
 import useInput from '../../lib/hooks/useInput';
+import { useNavigate } from 'react-router-dom';
+import withLoggedIn from 'lib/hooks/withLoggedIn';
 
 const CreateGroupView: FC = () => {
   const { ref, value: groupName, onChange: onChangeGroupName, isDirty: isGroupNameDirty } = useInput('');
@@ -13,6 +14,7 @@ const CreateGroupView: FC = () => {
   const [disabled, setDisabled] = useState(true);
   const { setModalView } = useUI();
   const { saveGroupName } = useGroup();
+  const navigate = useNavigate();
 
   const handleCreate = async (e: SyntheticEvent<EventTarget>) => {
     e.preventDefault();
@@ -22,7 +24,9 @@ const CreateGroupView: FC = () => {
       setMessage('');
 
       saveGroupName(groupName);
-      setModalView('ADDMEMBERS_VIEW');
+
+      navigate('/members');
+      // setModalView('ADDMEMBERS_VIEW');
     } catch ({ errors }: any) {
       if (errors instanceof Array) {
         setMessage(errors.map((e: any) => e.message).join('<br />'));
@@ -60,4 +64,4 @@ const CreateGroupView: FC = () => {
   );
 };
 
-export default GroupLayout(CreateGroupView);
+export default withLoggedIn(CreateGroupView);

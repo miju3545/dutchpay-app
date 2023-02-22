@@ -27,7 +27,7 @@ type ReturnState = State & {
 const initialState: State = {
   displaySidebar: false,
   displayDropdown: false,
-  displayModal: true,
+  displayModal: false,
   sidebarView: 'EXPENSE_VIEW',
   modalView: 'CREATEGROUP_VIEW',
   userAvatar: '',

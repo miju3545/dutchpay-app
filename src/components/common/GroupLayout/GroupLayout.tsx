@@ -3,11 +3,11 @@ import { GroupProvider } from '../../group/context';
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <GroupProvider>
-      <div style={{ minWidth: '500px', border: '1px solid #dfdfdf' }}>
-        <div>{children}</div>
-      </div>
-    </GroupProvider>
+    // <GroupProvider>
+    <div style={{ minWidth: '500px', border: '1px solid #dfdfdf' }}>
+      <div>{children}</div>
+    </div>
+    // </GroupProvider>
   );
 };
 
